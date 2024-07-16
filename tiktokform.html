@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Submit Your Video Idea</title>
+</head>
+<body>
+  <h2>Submit Your Video Idea</h2>
+  <form id="ideaForm">
+    <label for="idea">Video Idea:</label><br>
+    <input type="text" id="idea" name="idea" required><br><br>
+    <input type="submit" value="Submit">
+  </form>
+  
+  <div id="response"></div>
+
+  <script>
+    document.getElementById('ideaForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const data = {
+        idea: formData.get('idea')
+      };
+
+      fetch('YOUR_WEBHOOK_URL', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+        const responseDiv = document.getElementById('response');
+        responseDiv.innerHTML = `Video URL: <a href="${data.videoUrl}" target="_blank">${data.videoUrl}</a>`;
+      })
+      .catch(error => console.error('Error:', error));
+    });
+  </script>
+</body>
+</html>
